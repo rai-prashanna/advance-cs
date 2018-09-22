@@ -9,7 +9,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
-
+#include <sys/types.h>
+#include <sys/wait.h>
 int main( void )
 {
     printf( "[dad] pid %d\n", getpid() );
@@ -22,6 +23,8 @@ int main( void )
         }
 
     for ( int i = 0; i < 3; i++ )
-        wait( NULL );
+        wait(NULL);
+
+	return 0;
 }
 
