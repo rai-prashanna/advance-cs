@@ -33,15 +33,16 @@ void pointless_calculation()
     }
 }
 
-void run child(int n)
+void run_child(int row)
   {
-    int row=0,col=0;
-    for( int i=0; i<8; i++)
+
+    for( int col=0; col<6; col++)
       {
         pointless_calculation();
-            set_led(n, i%6, RGB565_GREEN);
+        set_led(row, col, RGB565_GREEN);
       }
   }
+
 
 int main()
 {
@@ -54,33 +55,20 @@ int main()
   int row, col;
   clear_leds();
 
-  pid_t pid = fork();
-  if (pid == 0)
-    {
-      row = 0;
-      col = 0;
-      for (int row = 0; row < 6; row++)
-        {
-          printf("I’m the child! Lighting LED at (%d, %d).....\n", row, col);
-          set_leds_single_color(RGB565_WHITE);
-          sleep_ms(2000);
+
+for(int num_child=0;num_child<8;num_child++){
+    for(int n=0;n<num_child;n++){
+        if(fork()==0)
+          {
+            run_child(n);
+          }
+        else{
+wait(NULL);
+sleep_ms(1000);
+clear_leds();
         }
     }
-  else
-    {
-      row = 0;
-      col = 0;
-      for (int col = 0; col < 6; col++)
-        {
-          printf("I’m the parent! Lighting LED at (%d, %d).....\n", row, col);
-          set_leds_single_color(RGB565_RED);
-          wait(NULL);
-          sleep_ms(2000);
-          clear_leds();
-
-        }
-    }
-
+}
   if (close_led_matrix() == -1)
     {
       printf("Could not properly close LED matrix\n");
