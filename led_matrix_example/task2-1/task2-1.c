@@ -39,6 +39,7 @@ void run_child(int row)
     for( int col=0; col<8; col++)
       {
         pointless_calculation();
+printf("inside child process  (%d,%d) ",row,col);
         set_led(row, col, RGB565_GREEN);
       }
   }
@@ -65,6 +66,7 @@ for(int num_child=0;num_child<8;num_child++){
           }
         else{
 wait(NULL);
+printf("inside parent process");
 sleep_ms(1000);
 clear_leds();
         }
