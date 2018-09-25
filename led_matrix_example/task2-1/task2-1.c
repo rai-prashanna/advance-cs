@@ -67,7 +67,7 @@ int main()
       abort();
     } else if (pids[i] == 0) {
      printf("\n inside child process %d  ", i);
-     run_child(n);
+     run_child(i);
      exit(0);
 
     }
@@ -131,6 +131,7 @@ int main()
 
 
 
+clear_leds();
 
   return 0;
 }
