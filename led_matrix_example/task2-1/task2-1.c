@@ -34,16 +34,15 @@ void pointless_calculation()
 }
 
 void run_child(int row)
-  {
+{
 
-    for( int col=0; col<8; col++)
-      {
-        pointless_calculation();
-printf("inside child process  (%d,%d) \n",row,col);
-        set_led(row, col, RGB565_GREEN);
-      }
-  }
-
+  for (int col = 0; col < 8; col++)
+    {
+      pointless_calculation();
+      printf("inside child process  (%d,%d) \n", row, col);
+      set_led(row, col, RGB565_GREEN);
+    }
+}
 
 int main()
 {
@@ -52,86 +51,48 @@ int main()
   int row, col;
 
   if (open_led_matrix() == -1)
-     {
-       printf("Failed to initialize LED matrix\n");
-       return -1;
-     }
+    {
+      printf("Failed to initialize LED matrix\n");
+      return -1;
+    }
 
-   clear_leds();
-
+  clear_leds();
 
   /* Start children. */
-  for (int i = 0; i < n; ++i) {
-    if ((pids[i] = fork()) < 0) {
-      perror("fork");
-      abort();
-    } else if (pids[i] == 0) {
-     printf("\n inside child process %d  ", i);
-     run_child(i);
-     exit(0);
+  for (int i = 0; i < n; ++i)
+    {
+      if ((pids[i] = fork()) < 0)
+        {
+          perror("fork");
+          abort();
+        }
+      else if (pids[i] == 0)
+        {
+          printf("\n inside child process %d  ", i);
+          run_child(i);
+          exit(0);
 
+        }
     }
-  }
 
   /* Wait for children to exit. */
   int status;
   pid_t pid;
-  while (n > 0) {
-    pid = wait(&status);
-    printf("\n Child with PID %ld exited with status 0x%x.\n", (long)pid, status);
-    --n;  // TODO(pts): Remove pid from the pids array.
-  }
-  printf("\n inside parent process and about to exit ");
-/*
-  for (int num_child = 0; num_child < 8; num_child++)
+  while (n > 0)
     {
-      for (int n = 0; n < num_child; n++)
-        {
-          if (fork() == 0)
-            {
-
-              run_child(n);
-              exit(0);
-            }
-
-          if ((pids[i] = fork()) < 0) {
-             perror("fork");
-             abort();
-           } else if (pids[i] == 0) {
-             DoWorkInChild();
-             exit(0);
-           }
-
-           Wait for children to exit.
-          int status;
-          pid_t pid;
-          while (1)
-            {
-              if (num_of_child == 0)
-                {
-                  break;
-                }
-              printf("inside parent process \n");
-              wait(NULL);
-              sleep_ms(1000);
-              --num_of_child;
-            }
-          printf("inside parent process and clearing all leds \n");
-          clear_leds();
-
-        }
+      pid = wait(&status);
+      printf("\n Child with PID %ld exited with status 0x%x.\n", (long) pid,
+          status);
+      --n;  // TODO(pts): Remove pid from the pids array.
     }
-*/
-/*
+  printf("\n inside parent process and about to exit ");
+
+  clear_leds();
   if (close_led_matrix() == -1)
     {
       printf("Could not properly close LED matrix\n");
       return -1;
-    }*/
-
-
-
-clear_leds();
+    }
 
   return 0;
 }
