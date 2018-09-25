@@ -41,6 +41,7 @@ void run_child(int row)
         pointless_calculation();
 printf("inside child process  (%d,%d) \n",row,col);
         set_led(row, col, RGB565_GREEN);
+exit(0);
       }
   }
 
