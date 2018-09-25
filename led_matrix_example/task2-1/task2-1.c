@@ -39,7 +39,7 @@ void run_child(int row)
     for( int col=0; col<8; col++)
       {
         pointless_calculation();
-printf("inside child process  (%d,%d) ",row,col);
+printf("inside child process  (%d,%d) \n",row,col);
         set_led(row, col, RGB565_GREEN);
       }
   }
@@ -70,10 +70,12 @@ while(1){
 if(num_of_child==0){
     break;
 }
+printf("inside parent process \n");
 wait(NULL);
 sleep_ms(1000);
 --num_of_child;
 }
+printf("inside parent process and clearing all leds \n");
 clear_leds();
  
         }
