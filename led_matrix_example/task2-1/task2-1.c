@@ -36,7 +36,7 @@ void pointless_calculation()
 void run_child(int row)
   {
 
-    for( int col=0; col<6; col++)
+    for( int col=0; col<8; col++)
       {
         pointless_calculation();
         set_led(row, col, RGB565_GREEN);
