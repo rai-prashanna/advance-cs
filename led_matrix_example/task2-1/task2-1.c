@@ -47,7 +47,7 @@ printf("inside child process  (%d,%d) ",row,col);
 
 int main()
 {
-
+int num_of_child=8;
   if (open_led_matrix() == -1)
     {
       printf("Failed to initialize LED matrix\n");
@@ -63,12 +63,19 @@ for(int num_child=0;num_child<8;num_child++){
           {
           
             run_child(n);
+exit(0);
           }
         else{
+while(1){
+if(num_of_child==0){
+    break;
+}
 wait(NULL);
-printf("inside parent process");
 sleep_ms(1000);
+--num_of_child;
+}
 clear_leds();
+ 
         }
     }
 }
