@@ -1,9 +1,13 @@
 /*
- * led_example.c - Shows off how to use the functions declared in led_matrix.h
- *
- * Written by Pontus Ekberg <pontus.ekberg@it.uu.se>
- * Last updated 2018-08-21
+ ============================================================================
+ Name        : task2.1.c
+ Author      : prashanna-rai
+ Version     : dev
+ Copyright   : Your copyright notice
+ Description : fork()
+ ============================================================================
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
