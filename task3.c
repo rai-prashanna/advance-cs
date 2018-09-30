@@ -1,19 +1,13 @@
 /*
  ============================================================================
- Name        : test.c
- Author      : 
- Version     :
+ Name        : task3.c
+ Author      : prashanna-rai
+ Version     : dev
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : simple shell
  ============================================================================
  */
 
-/*
- * led_example.c - Shows off how to use the functions declared in led_matrix.h
- *
- * Written by Pontus Ekberg <pontus.ekberg@it.uu.se>
- * Last updated 2018-08-21
- */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -94,6 +88,6 @@ int main()
                           }
 
                       }
-                    return 0;/* Parent terminates */
+                    return 0;
                   }
 
