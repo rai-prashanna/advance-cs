@@ -1,8 +1,11 @@
 /*
- * led_example.c - Shows off how to use the functions declared in led_matrix.h
- *
- * Written by Pontus Ekberg <pontus.ekberg@it.uu.se>
- * Last updated 2018-08-21
+ ============================================================================
+ Name        : task2.1.c
+ Author      : prashanna-rai
+ Version     : dev
+ Copyright   : Your copyright notice
+ Description : fork()
+ ============================================================================
  */
 
 #include <stdio.h>
@@ -15,7 +18,7 @@
 
 void sleep_ms(int milliseconds)
 {
-  usleep(1000 * milliseconds);
+    usleep(1000 * milliseconds);
 }
 
 /*
@@ -25,76 +28,50 @@ void sleep_ms(int milliseconds)
  */
 void pointless_calculation()
 {
-  int amount_of_pointlessness = 100000000;
-  int x = 0;
-  for (int i = 0; i < amount_of_pointlessness; i++)
+    int amount_of_pointlessness = 100000000;
+    int x = 0;
+    for (int i = 0; i < amount_of_pointlessness; i++)
     {
-      x += i;
+        x += i;
     }
 }
 
 void run_child(int row)
 {
 
-  for (int col = 0; col < 8; col++)
+    for (int col = 0; col < 8; col++)
     {
-      pointless_calculation();
-      printf("inside child process  (%d,%d) \n", row, col);
-      set_led(row, col, RGB565_GREEN);
+        pointless_calculation();
+        printf("inside child process  (%d,%d) \n", row, col);
+        set_led(row, col, RGB565_GREEN);
     }
 }
 
-int main()
+int main ()
 {
-  int n = 8;
-  pid_t pids[8];
-  int row, col;
-
-  if (open_led_matrix() == -1)
+    if ( open_led_matrix () != 0)
     {
-      printf("Failed to initialize LED matrix\n");
-      return -1;
+        printf("Failed to initialize LED matrix\n");
+        exit (-1) ;
+
     }
 
-  clear_leds();
+    run_child (0) ; // Argument corresponds to row ...
 
-  /* Start children. */
-  for (int i = 0; i < n; ++i)
+    usleep (1000000) ;
+    clear_leds () ;
+
+    if ( close_led_matrix () != 0)
     {
-      if ((pids[i] = fork()) < 0)
-        {
-          perror("fork");
-          abort();
-        }
-      else if (pids[i] == 0)
-        {
-          printf("\n inside child process %d  ", i);
-          run_child(i);
-          exit(0);
+        printf("Could not properly close LED matrix\n");
+        exit (1) ;
 
-        }
     }
 
-  /* Wait for children to exit. */
-  int status;
-  pid_t pid;
-  while (n > 0)
-    {
-      pid = wait(&status);
-      printf("\n Child with PID %ld exited with status 0x%x.\n", (long) pid,
-          status);
-      --n;  // TODO(pts): Remove pid from the pids array.
-    }
-  printf("\n inside parent process and about to exit ");
+    return 0;
 
-  clear_leds();
-  if (close_led_matrix() == -1)
-    {
-      printf("Could not properly close LED matrix\n");
-      return -1;
-    }
-
-  return 0;
 }
 
 
+
+ 
