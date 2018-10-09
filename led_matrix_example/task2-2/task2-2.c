@@ -1,8 +1,11 @@
 /*
- * led_example.c - Shows off how to use the functions declared in led_matrix.h
- *
- * Written by Pontus Ekberg <pontus.ekberg@it.uu.se>
- * Last updated 2018-08-21
+ ============================================================================
+ Name        : task2.2.c
+ Author      : prashanna-rai
+ Version     : dev
+ Copyright   : Your copyright notice
+ Description : fork() with nice value
+ ============================================================================
  */
 
 #include <stdio.h>
@@ -31,13 +34,14 @@ void pointless_calculation()
         x += i;
 }
 
+
 int main ()
 {
     int n = 8;
     pid_t pid;
     int row, col;
     if (open_led_matrix() != 0)
-    {
+   {
         perror (" Failed to initialize LED matrix \n") ;
         exit(-1) ;
     }
@@ -79,6 +83,6 @@ int main ()
     }
 
     return 0;
-}
 
+}
 
