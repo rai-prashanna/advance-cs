@@ -9,72 +9,76 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
-
+#include <sys/types.h>
+#include <sys/wait.h>
 #include "led_matrix.h"
 
-void sleep_ms(int milliseconds)
+void run_child(int row)
 {
-  usleep(1000 * milliseconds);
+    for (int col = 0; col < 8; ++ col)
+    {
+        pointless_calculation () ;
+        printf("inside child process  (%d,%d) \n", row, col);
+        set_led (row, col, RGB565_GREEN );
+    }
 }
 
-/*
- * Do some pointless CPU - heavy computations . Takes about 1 second
- * to complete on a single core of the ARM Cortex A53 processor of
- * the Raspberry Pi 3 model B with default gcc 6.3.0 op tim iz at io ns .
- */
 void pointless_calculation()
 {
-  int amount_of_pointlessness = 100000000;
-  int x = 0;
-  for (int i = 0; i < amount_of_pointlessness; i++)
-    {
-      x += i;
-    }
+    int x = 0;
+    int amount_of_pointlessness = 100000000;
+    for (int i = 0; i < amount_of_pointlessness ; ++ i)
+        x += i;
 }
 
-void run_child(int row)
-  {
-
-    for( int col=0; col<6; col++)
-      {
-        pointless_calculation();
-        set_led(row, col, RGB565_GREEN);
-      }
-  }
-
-
-int main()
+int main ()
 {
-
-  if (open_led_matrix() == -1)
+    int n = 8;
+    pid_t pid;
+    int row, col;
+    if (open_led_matrix() != 0)
     {
-      printf("Failed to initialize LED matrix\n");
-      return -1;
+        perror (" Failed to initialize LED matrix \n") ;
+        exit(-1) ;
     }
-  int row, col;
-  clear_leds();
+    else
+    {
+        for (int num_children = 0; num_children < n; ++ num_children )
+        {
+            for (int n = 0; n < num_children ; ++ n )
+            {
+                pid_t pid = fork () ;
 
+                while ( pid < 0)
+                {
+                    perror (" error creating fork \n");
+                    pid = fork () ;
+                }
 
-for(int num_child=0;num_child<8;num_child++){
-    for(int n=0;n<num_child;n++){
-        if(fork()==0)
-          {
-            nice(n);
-            run_child(n);
-          }
-        else{
-wait(NULL);
-sleep_ms(1000);
-clear_leds();
+                if ( pid == 0)
+                {
+                    run_child ( n);
+                    exit (0) ;
+                }
+            }
+
+            for (int n = 0; n < num_children ; ++ n )
+            {
+                wait(NULL);
+            }
+
+            usleep(1000000) ;
+            clear_leds() ;
+        }
+
+        if ( close_led_matrix () != 0)
+        {
+            perror ("Could not properly close LED matrix\n");
+            exit(-1) ;
         }
     }
-}
-  if (close_led_matrix() == -1)
-    {
-      printf("Could not properly close LED matrix\n");
-      return -1;
-    }
-  return 0;
+
+    return 0;
 }
 
 
