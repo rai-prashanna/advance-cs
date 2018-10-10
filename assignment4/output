@@ -1,0 +1,14 @@
+ 1.54 seconds spent on chasing data in array of    1 KB
+ 1.50 seconds spent on chasing data in array of    2 KB
+ 1.50 seconds spent on chasing data in array of    4 KB
+ 1.50 seconds spent on chasing data in array of    8 KB
+ 1.50 seconds spent on chasing data in array of   16 KB
+ 1.62 seconds spent on chasing data in array of   32 KB
+ 2.13 seconds spent on chasing data in array of   64 KB
+ 2.45 seconds spent on chasing data in array of  128 KB
+ 2.61 seconds spent on chasing data in array of  256 KB
+ 3.53 seconds spent on chasing data in array of  512 KB
+10.83 seconds spent on chasing data in array of 1024 KB
+14.70 seconds spent on chasing data in array of 2048 KB
+17.17 seconds spent on chasing data in array of 4096 KB
+18.45 seconds spent on chasing data in array of 8192 KB
