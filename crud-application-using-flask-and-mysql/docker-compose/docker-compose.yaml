@@ -18,10 +18,13 @@ services:
       - db
      ports:
        - "8181:8181"
+       - "5000:5000"
      working_dir: /hnf/source_code
      volumes:
        - ./source_code/:/hnf/source_code/
-     command: python server.py
+       - ./:/temp/
+     entrypoint:
+       - /temp/start.sh   
      links: 
        - db
 
