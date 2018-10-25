@@ -1,11 +1,7 @@
-from flask import Flask, flash, render_template, redirect, url_for, request, session
+from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
-from module.database import Database
-
 
 app = Flask(__name__)
-app.secret_key = "mys3cr3tk3y"
-db = Database()
 api = Api(app)
 
 TODOS = {
@@ -20,9 +16,7 @@ def abort_if_todo_doesnt_exist(todo_id):
         abort(404, message="Todo {} doesn't exist".format(todo_id))
 
 parser = reqparse.RequestParser()
-parser.add_argument('temp')
-parser.add_argument('humidity')
-parser.add_argument('pressure')
+parser.add_argument('task')
 
 
 # Todo
@@ -39,17 +33,16 @@ class Todo(Resource):
 
     def put(self, todo_id):
         args = parser.parse_args()
-        db.insert(args)
-        return args,201        
-
+        task = {'task': args['task']}
+        TODOS[todo_id] = task
+        return task, 201
 
 
 # TodoList
 # shows a list of all todos, and lets you POST to add new tasks
 class TodoList(Resource):
     def get(self):
-        data = db.read(None)
-        return data 
+        return TODOS
 
     def post(self):
         args = parser.parse_args()
@@ -57,9 +50,6 @@ class TodoList(Resource):
         todo_id = 'todo%i' % todo_id
         TODOS[todo_id] = {'task': args['task']}
         return TODOS[todo_id], 201
-
-
-
 
 ##
 ## Actually setup the Api resource routing here

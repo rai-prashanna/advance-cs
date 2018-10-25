@@ -16,7 +16,7 @@ db = Database()
 def index():
     data = db.read(None)
     
-    return data
+    return render_template('index.html', data = data)
 
 @app.route('/add/')
 def add():

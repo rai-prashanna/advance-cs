@@ -1,0 +1,30 @@
+version: '2'
+services:
+   db:
+     image: mysql:5.7
+     restart: always
+     volumes:
+       - ./db_data/:/docker-entrypoint-initdb.d/ 
+     environment:
+       MYSQL_ROOT_PASSWORD: dev
+       MYSQL_DATABASE: weather
+       MYSQL_USER: dev
+       MYSQL_PASSWORD: dev
+
+   phonebook-flask:
+     container_name: phonebook-flask
+     image: muhammadhanif/phonebook:flask
+     depends_on:
+      - db
+     ports:
+       - "8181:8181"
+       - "5000:5000"
+     working_dir: /hnf/source_code
+     volumes:
+       - ./source_code/:/hnf/source_code/
+       - ./:/temp/
+     entrypoint:
+       - /temp/start.sh   
+     links: 
+       - db
+
