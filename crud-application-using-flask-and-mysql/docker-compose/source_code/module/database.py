@@ -9,7 +9,29 @@ import pymysql
 class Database:
     def connect(self):
         return pymysql.connect("db","root","dev","weather" )
-    
+
+
+    def read(self, id):
+        con = Database.connect(self)
+        cursor = con.cursor()            
+        try: 
+            if id == None:
+                cursor.execute("SELECT * FROM sensor_data order by id asc")
+                row_headers=[x[0] for x in cur.description]
+                rv = cur.fetchall()
+                json_data=[]
+                for result in rv:
+                    json_data.append(dict(zip(row_headers,result)))
+                return json.dumps(json_data)
+            else: 
+                cursor.execute("SELECT * FROM sensor_data where id = %s order by id asc", (id,))
+                return ()
+        except:
+            return ()
+        finally:
+            con.close()
+
+
     def read(self, id):
         con = Database.connect(self)
         cursor = con.cursor()
@@ -25,13 +47,15 @@ class Database:
             return ()
         finally:
             con.close()
-            
+
+
+
     def insert(self,data):
         con = Database.connect(self)
         cursor = con.cursor()
      
         try:
-            cursor.execute("INSERT INTO sensor_data(temp,humidity,pressure) VALUES(%s, %s, %s)", (data['temp'],data['humidity'],data['pressure'],))
+            cursor.execute("INSERT INTO sensor_data(temp,humidity,pressure) VALUES(%s, %s, %s)", (data['temp'],data['humidity'],data['address'],))
             con.commit()
             
             return True

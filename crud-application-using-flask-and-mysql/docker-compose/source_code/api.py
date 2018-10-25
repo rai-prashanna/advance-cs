@@ -15,9 +15,9 @@ TODOS = {
 }
 
 
-def abort_if_todo_doesnt_exist(todo_id):
-    if todo_id not in TODOS:
-        abort(404, message="Todo {} doesn't exist".format(todo_id))
+def abort_if_todo_doesnt_exist(id):
+    if id not in TODOS:
+        abort(404, message="Todo {} doesn't exist".format(id))
 
 parser = reqparse.RequestParser()
 parser.add_argument('temp')
@@ -28,16 +28,16 @@ parser.add_argument('pressure')
 # Todo
 # shows a single todo item and lets you delete a todo item
 class Todo(Resource):
-    def get(self, todo_id):
-        abort_if_todo_doesnt_exist(todo_id)
-        return TODOS[todo_id]
+    def get(self, id):
+        data = db.read(id);
+        return data
 
-    def delete(self, todo_id):
-        abort_if_todo_doesnt_exist(todo_id)
-        del TODOS[todo_id]
+    def delete(self, id):
+        abort_if_todo_doesnt_exist(id)
+        del TODOS[id]
         return '', 204
 
-    def put(self, todo_id):
+    def put(self, id):
         args = parser.parse_args()
         db.insert(args)
         return args,201        
@@ -48,15 +48,15 @@ class Todo(Resource):
 # shows a list of all todos, and lets you POST to add new tasks
 class TodoList(Resource):
     def get(self):
-        data = db.read(None)
-        return data 
+        datas = db.read(None);
+        return datas
 
     def post(self):
         args = parser.parse_args()
-        todo_id = int(max(TODOS.keys()).lstrip('todo')) + 1
-        todo_id = 'todo%i' % todo_id
-        TODOS[todo_id] = {'task': args['task']}
-        return TODOS[todo_id], 201
+        id = int(max(TODOS.keys()).lstrip('todo')) + 1
+        id = 'todo%i' % id
+        TODOS[id] = {'task': args['task']}
+        return TODOS[id], 201
 
 
 
@@ -64,10 +64,12 @@ class TodoList(Resource):
 ##
 ## Actually setup the Api resource routing here
 ##
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')
+api.add_resource(TodoList, '/getWeathers')
+api.add_resource(Todo, '/getWeathers/<id>')
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', threaded=True)
+
+getWeathers
 
