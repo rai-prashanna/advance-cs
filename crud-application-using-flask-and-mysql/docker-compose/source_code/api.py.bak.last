@@ -77,37 +77,6 @@ class InsertWeather(Resource):
         db.insert(readings)
         return readings,201
 
-class DisplayWeather(Resource):
-    def get(self):
-        hat = SenseHat()
-        hat.clear()
-        hat.low_light = True
-        e = (0, 0, 0)
-        w = (255, 255, 255)
-
-        green = (0, 255, 0)
-        yellow = (255, 255, 0)
-        blue = (0, 0, 255)
-        red = (255, 0, 0)
-        white = (255,255,255)
-        nothing = (0,0,0)
-        pink = (255,105, 180)
-        readings = dict()
-        readings["temp"] = hat.temperature
-        readings["humidity"] = hat.humidity
-        readings["pressure"] = hat.pressure
-        for key in readings.copy():
-            if key in {"temp", "humidity", "pressure"}:
-                readings[key] = round(readings[key], 2)
-        hat.show_message("Temperature is :", text_colour=yellow, back_colour=blue, scroll_speed=0.05)
-        hat.show_message(str(repr(readings["temp"])),text_colour=white,back_colour=blue,scroll_speed=0.15)
-        hat.show_message("Humidity is :", text_colour=yellow, back_colour=blue, scroll_speed=0.05)
-        hat.show_message(str(repr(readings["humidity"])),text_colour=white,back_colour=blue,scroll_speed=0.15)
-        hat.show_message("Pressure is :", text_colour=red, back_colour=blue, scroll_speed=0.05)
-        hat.show_message(str(repr(readings["pressure"])),text_colour=white,back_colour=blue,scroll_speed=0.15)
-        hat.clear()
-        insertdata = json.dumps(readings)
-        db.insert(readings)
 
 
 
@@ -117,7 +86,7 @@ class DisplayWeather(Resource):
 api.add_resource(TodoList, '/getWeathers')
 api.add_resource(Todo, '/getWeathers/<id>')
 api.add_resource(InsertWeather, '/insertWeathers/')
-api.add_resource(DisplayWeather, '/displayWeather/')
+
 
 
 if __name__ == "__main__":
